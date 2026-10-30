@@ -1,10 +1,11 @@
 # Computacion_Aplicada-Grupo_3_-Los_Tres_Bits-
 
 ## Integrantes: 
-##Procedimientos llevados a cabo para la configuración de la máquina virtual
-Preparación: Importar la máquina virtual base
+## Procedimientos llevados a cabo para la configuración de la máquina virtual
+### Preparación: Importar la máquina virtual base
 El desarrollo del trabajo parte de una máquina virtual previamente configurada, con el sistema operativo Debian 11. La misma puede importarse al gestor de máquinas virtuales a través de los archivos ‘.OVA’ correspondientes. Éstos proveen la imagen de la máquina y sus especificaciones tanto a nivel de dispositivo físico como dentro de la propia máquina virtual. Una vez importada, por fuera de la máquina virtual deben hacerse cambios mínimos que serán explicados a su debido momento durante el desarrollo.
-1) Configuración del entorno
+
+### 1) Configuración del entorno
 Clave Root:
 Para poder manipular la máquina virtual, se debe primero obtener la contraseña del usuario Root para llevar a cabo las diversas configuraciones a nivel de sistema. Para ello, se deben modificar las instrucciones de arranque para que inicie el intérprete de comandos como primer paso. 
 Al iniciar la máquina virtual, el gestor de arranque GRUB presenta las opciones disponibles. Entre las funciones del usuario, presionando la tecla ‘e’, puede modificar las órdenes de arranque. Entre dichos parámetros, el comando ‘linux’ es el disparador del arranque del sistema operativo. Si se agrega al final de su línea ‘init=/bin/bash’, al iniciar se dispone con una interfaz para ejecutar comandos como usuario Root. 
