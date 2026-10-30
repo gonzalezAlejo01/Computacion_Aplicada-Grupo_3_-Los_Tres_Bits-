@@ -81,7 +81,7 @@ Una vez configuradas las nuevas particiones, pueden moverse los archivos de apac
 
 <directory [directorio]>
   
-&nbsp;&nbsp;configuraciones sobre la ruta
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;configuraciones sobre la ruta
 
 &lt;/directory&gt;
 
