@@ -15,14 +15,15 @@ Para poder realizar cambios persistentes, mediante el comando ‘mount -o remoun
 #### Hostname: 
 Para actualizar el hostname de forma persistente, debe actualizarse en el archivo /etc/hostname, cuyo contenido debe ser el nombre de host que quiera usarse.
 
-#### Extra: Actualizar repositorios para la descarga de paquetes
+#### Actualizar repositorios para la descarga de paquetes
 Debian 11 llegó al fin de su ciclo de vida, por lo que los paquetes fueron movidos a los ‘Debian Archives’, debiendo usar las siguientes URLs el gestor de paquetes. Los contenidos deben actualizarse en el archivo /etc/apt/sources.list:
 deb http://archive.debian.org/debian bullseye main contrib non-free
 deb http://archive.debian.org/debian-security/ bullseye-security main contrib non-free
 deb http://archive.debian.org/debian bullseye-updates main contrib non-free
 
 ### 2) Servicios
-#### SSH: Para utilizar SSH debe instalarse el paquete ‘openssh-server’. Los pasos para su configuración son los siguientes:
+#### SSH: 
+Para utilizar SSH debe instalarse el paquete ‘openssh-server’. Los pasos para su configuración son los siguientes:
 - a)	Actualizar el hostname en /etc/hosts, si el que allí se encuentra no coincide con el nombre de host elegido.
 - b)	Copiar la clave pública desde el usuario cliente al host. Para este pasaje inicial de archivos una alternativa implica permitir la conexión estándar con el usuario root usando su contraseña, con el comando:
 scp [ubicación clave publica] root@direcciónIP:/etc/.ssh/authorized_keys
@@ -34,16 +35,19 @@ permit root login: prohibit password (permite entrar como root, pero no con la c
 password authentication: no (impedir de forma general el uso de contraseñas)
 Una vez configurado, un cliente puede conectarse al host usando su clave privada, con el comando ssh -i [ubicación clave privada] usuario@ip. A su vez, los archivos faltantes pueden copiarse indicando la clave a usar de la misma manera.
 
-Apache: Su uso requiere el paquete ‘apache2’. Una vez instalado, automáticamente entra en ejecución en el arranque, pudiendo verificar el funcionamiento buscando desde un navegador la dirección IP de la máquina virtual, lo que carga el archivo configurado a leer. Los archivos que lee por defecto encuentran dentro de /var/www/html, por lo que se deben copiar allí tanto el index.php como el logo.png, ya que este último es buscado por el index.php dentro de su mismo directorio.
+#### Apache: 
+Su uso requiere el paquete ‘apache2’. Una vez instalado, automáticamente entra en ejecución en el arranque, pudiendo verificar el funcionamiento buscando desde un navegador la dirección IP de la máquina virtual, lo que carga el archivo configurado a leer. Los archivos que lee por defecto encuentran dentro de /var/www/html, por lo que se deben copiar allí tanto el index.php como el logo.png, ya que este último es buscado por el index.php dentro de su mismo directorio.
 Para que pueda utilizarse archivos .php, debe además instalarse el paquete ‘libapache2-mod-php’
-MariaDB: Emplea los paquetes mariadb-server, mariadb-client y galera-4 para su gestión y funcionamiento, y php-mysqli y php-pdo para que pueda interactuar el archivo .php con la base de datos. 
+
+#### MariaDB: 
+Emplea los paquetes mariadb-server, mariadb-client y galera-4 para su gestión y funcionamiento, y php-mysqli y php-pdo para que pueda interactuar el archivo .php con la base de datos. 
 Una vez descargado, con el comando ‘mariadb-secure-installation’ se realizan configuraciones iniciales seguras mediante una serie de prompts con las indicaciones recomendadas, como eliminar usuarios anónimos o tablas de prueba. 
 Para cargar la base de datos provista, se utiliza el comando ‘mariadb -u root -p < [ubicación del .sql]’ para ejecutar con el usuario root de mariadb los contenidos del .sql especificado.
 Para la conexión con la base de datos, el index.php utiliza un usuario y clave predefinidos, por lo que debe crearse en el gestor de base de datos:
 -Se ingresa al programa de gestión con el usuario root: mariadb -u root -p
 -Se crea el usuario: create user ‘lcars’@’localhost’ identified by ‘NCC1701D’
 
-3) Configuración de red:
+### 3) Configuración de red:
 Por defecto, el dispositivo usa una dirección IP asignada mediante DHCP. Para configurar una dirección estática, se debe modificar el archivo /etc/network/interfaces: La línea que comienza con ‘iface’ define las configuraciones del dispositivo, como el nombre de interfaz, y el modo de direccionamiento. En lugar de, como tiene el ejemplo, dhcp, debe en su lugar escribirse ‘static’ para dirección estática, y en las siguientes líneas definir:
 -	address   [dirección IP elegida]/[mascara de subred]
 la dirección IP debe ser una disponible dentro del rango de direcciones de la red física, para que puedan reconocerse dentro de la red la máquina virtual y la máquina anfitriona, y la máscara de subred adecuada
