@@ -80,7 +80,7 @@ Una vez configuradas las nuevas particiones, pueden moverse los archivos de apac
 - /etc/apache2/apache2.conf: Contiene configuraciones globales de apache. Entre estas, otorga permisos de seguridad y capacidades a ciertos directorios:
 
 <directory [directorio]>
-             configuraciones sobre la ruta
+  configuraciones sobre la ruta
 </directory>
 
 uno de estos corresponde al directorio donde se ubican los archivos para cargar en el sitio. Por defecto, está configurado para /var/www. Son permisos necesarios para el funcionamiento, por lo que debe cambiarse por /mnt/www_dir
