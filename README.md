@@ -121,10 +121,10 @@ Respecto al cronograma, si un valor no debe especificarse, el wildcard ‘*’ a
 
 - 00 23 * * 1,3,5 root /bin/bash /opt/scripts/backup_full.sh /mnt/www_dir
 
-Ejecuta el script de respaldo sobre el directorio /mnt/www_dir a las 23:00 los lunes, miércoles y viernes. Y:
+Ejecuta el script de respaldo sobre el directorio /mnt/www_dir a las 23:00 los lunes, miércoles y viernes, y:
 
 - 00 00 * * * root /bin/bash /opt/scripts/backup_full.sh /var/logs
 
-Respalda /var/logs todos los días a las 00:00
+Respalda /var/logs todos los días a las 00:00.
 
 Los cambios efectuados sobre dichos archivos, incluyendo su creación, tienen efecto en el mismo instante, no se deben hacer recargas manuales del servicio.
