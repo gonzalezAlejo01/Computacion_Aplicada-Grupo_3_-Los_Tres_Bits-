@@ -24,13 +24,13 @@ deb http://archive.debian.org/debian bullseye-updates main contrib non-free
 ### 2) Servicios
 #### SSH: 
 Para utilizar SSH debe instalarse el paquete ‘openssh-server’. Los pasos para su configuración son los siguientes:
-- a)	Actualizar el hostname en /etc/hosts, si el que allí se encuentra no coincide con el nombre de host elegido.
-- b)	Copiar la clave pública desde el usuario cliente al host. Para este pasaje inicial de archivos una alternativa implica permitir la conexión estándar con el usuario root usando su contraseña, con el comando:
+- Actualizar el hostname en /etc/hosts, si el que allí se encuentra no coincide con el nombre de host elegido.
+- Copiar la clave pública desde el usuario cliente al host. Para este pasaje inicial de archivos una alternativa implica permitir la conexión estándar con el usuario root usando su contraseña, con el comando:
 scp [ubicación clave publica] root@direcciónIP:/etc/.ssh/authorized_keys
-- c)	Otorgar los permisos adecuados para el directorio .ssh del usuario y al archivo .ssh/authorized_keys:
+- Otorgar los permisos adecuados para el directorio .ssh del usuario y al archivo .ssh/authorized_keys:
 chmod 700 ~/.ssh (lectura, escritura, ejecución para el usuario)
 chmod 600 ~/.ssh/authorized_keys (lectura y escritura para el usuario)
-- d)	Configurar SSH para que utilice únicamente el par de claves: El archivo /etc/ssh/sshd_config contiene las configuraciones a usar en el dispositivo en caso de ser el servidor. Allí, deben modificarse los parámetros:
+- Configurar SSH para que utilice únicamente el par de claves: El archivo /etc/ssh/sshd_config contiene las configuraciones a usar en el dispositivo en caso de ser el servidor. Allí, deben modificarse los parámetros:
 permit root login: prohibit password (permite entrar como root, pero no con la contraseña)
 password authentication: no (impedir de forma general el uso de contraseñas)
 Una vez configurado, un cliente puede conectarse al host usando su clave privada, con el comando ssh -i [ubicación clave privada] usuario@ip. A su vez, los archivos faltantes pueden copiarse indicando la clave a usar de la misma manera.
@@ -55,13 +55,14 @@ la dirección IP debe ser una disponible dentro del rango de direcciones de la r
 -	dns-nameservers [misma dirección que el Gateway]
 Una vez modificado el archivo, se deben aplicar los cambios con el comando ‘systectl restart networking.services’
 
-4) Almacenamiento
-Creación del disco virtual:
+### 4) Almacenamiento
+#### Creación del disco virtual:
 Para agregar el disco a la máquina virtual, debe primero crearse en el mismo VirtualBox: Dentro de las configuraciones de la máquina virtual, en el menú de almacenamiento, se debe agregar un disco duro al controlador SATA. En el panel de selector de discos duros, de elige la opción de crear, siguiendo los pasos de la ventana emergente. El tipo de archivo a usar es de VDI (VirtualBox Disk Image), y definir el tamaño que se quiere que tenga. El nuevo disco creado puede ser seleccionado en el selector de discos duros con un doble click, para añadirlo a la lista de dispositivos de la máquina virtual.
-Configuración del dispositivo y sus particiones:
+
+#### Configuración del dispositivo y sus particiones:
 Una vez hecho, la máquina virtual reconoce la nueva unidad, pero esta debe configurarse para poder usarla: 
 Con el comando ‘lsblk’ se pueden visualizar los dispositivos de almacenamiento disponibles y sus particiones, para poder así registrar el nombre del dispositivo agregado. Conociendo dicho nombre, sea por ejemplo ‘sdb’ o ‘sdc’, con el comando:
-fdisk /dev/[nombreDelDisco] se inicializa un programa para la creación de particiones. Dicho comando inicia un menú interactivo, en donde se configura el disco mediante una serie de comandos. Para empezar, se indica que se busca crear nuevas particiones con la opción ‘n’, y seguido por la opción ‘p’ para indicar que son particiones primarias. Cuando el programa solicite el último sector de la partición, allí puede especificarse el tamaño con instrucciones de formato: ‘+nX, con ‘X’ representando la unidad para definir el tamaño (sea M para megabytes, o G para gigabytes, por ejemplo), y siendo ‘n’ la cantidad de dicha unidad que se quiere que tenga. La opción w es usada para guardar los cambios. 
+fdisk /dev/[nombreDelDisco] se inicializa un programa para la creación de particiones. Dicho programa usa un menú interactivo, en donde se configura el disco mediante una serie de operaciones de usuario. Para empezar, se indica que se busca crear nuevas particiones con la opción ‘n’, y seguido por la opción ‘p’ para indicar que son particiones primarias. Cuando el programa solicite el último sector de la partición, allí puede especificarse el tamaño con instrucciones de formato: ‘+nX, con ‘X’ representando la unidad para definir el tamaño (sea M para megabytes, o G para gigabytes, por ejemplo), y siendo ‘n’ la cantidad de dicha unidad que se quiere que tenga. La opción w es usada para guardar los cambios. 
 Una vez creadas, al usar el comando lsblk las particiones del disco son visibles, cada una con un identificador propio.
 Luego de crear las particiones, se debe asignar su file system, definir la estructura a usar para que puedan utilizarse adecuadamente. Para el caso, se usa ext4, definido con el comando:
 mkfs.ext4 /dev/[partición a dar formato]
