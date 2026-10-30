@@ -44,8 +44,8 @@ Emplea los paquetes mariadb-server, mariadb-client y galera-4 para su gestión y
 Una vez descargado, con el comando ‘mariadb-secure-installation’ se realizan configuraciones iniciales seguras mediante una serie de prompts con las indicaciones recomendadas, como eliminar usuarios anónimos o tablas de prueba. 
 Para cargar la base de datos provista, se utiliza el comando ‘mariadb -u root -p < [ubicación del .sql]’ para ejecutar con el usuario root de mariadb los contenidos del .sql especificado.
 Para la conexión con la base de datos, el index.php utiliza un usuario y clave predefinidos, por lo que debe crearse en el gestor de base de datos:
--Se ingresa al programa de gestión con el usuario root: mariadb -u root -p
--Se crea el usuario: create user ‘lcars’@’localhost’ identified by ‘NCC1701D’
+- Se ingresa al programa de gestión con el usuario root: mariadb -u root -p
+- Se crea el usuario: create user ‘lcars’@’localhost’ identified by ‘NCC1701D’
 
 ### 3) Configuración de red:
 Por defecto, el dispositivo usa una dirección IP asignada mediante DHCP. Para configurar una dirección estática, se debe modificar el archivo /etc/network/interfaces: La línea que comienza con ‘iface’ define las configuraciones del dispositivo, como el nombre de interfaz, y el modo de direccionamiento. En lugar de, como tiene el ejemplo, dhcp, debe en su lugar escribirse ‘static’ para dirección estática, y en las siguientes líneas definir:
@@ -61,18 +61,23 @@ Para agregar el disco a la máquina virtual, debe primero crearse en el mismo Vi
 
 #### Configuración del dispositivo y sus particiones:
 Una vez hecho, la máquina virtual reconoce la nueva unidad, pero esta debe configurarse para poder usarla: 
-Con el comando ‘lsblk’ se pueden visualizar los dispositivos de almacenamiento disponibles y sus particiones, para poder así registrar el nombre del dispositivo agregado. Conociendo dicho nombre, sea por ejemplo ‘sdb’ o ‘sdc’, con el comando:
-fdisk /dev/[nombreDelDisco] se inicializa un programa para la creación de particiones. Dicho programa usa un menú interactivo, en donde se configura el disco mediante una serie de operaciones de usuario. Para empezar, se indica que se busca crear nuevas particiones con la opción ‘n’, y seguido por la opción ‘p’ para indicar que son particiones primarias. Cuando el programa solicite el último sector de la partición, allí puede especificarse el tamaño con instrucciones de formato: ‘+nX, con ‘X’ representando la unidad para definir el tamaño (sea M para megabytes, o G para gigabytes, por ejemplo), y siendo ‘n’ la cantidad de dicha unidad que se quiere que tenga. La opción w es usada para guardar los cambios. 
+Con el comando ‘lsblk’ se pueden visualizar los dispositivos de almacenamiento disponibles y sus particiones, para poder así registrar el nombre del dispositivo agregado. Conociendo dicho nombre, sea por ejemplo ‘sdb’ o ‘sdc’, con el comando: fdisk /dev/[nombreDelDisco] 
+
+Dicho comando inicializa un programa para la creación de particiones. Mediante un menú interactivo, se puede configura el disco mediante una serie de operaciones de usuario. Para empezar, se indica que se busca crear nuevas particiones con la opción ‘n’, y seguido por la opción ‘p’ para indicar que son particiones primarias. Cuando el programa solicite el último sector de la partición, allí puede especificarse el tamaño con instrucciones de formato: ‘+nX, con ‘X’ representando la unidad para definir el tamaño (sea M para megabytes, o G para gigabytes, por ejemplo), y siendo ‘n’ la cantidad de dicha unidad que se quiere que tenga. La opción w es usada para guardar los cambios. 
+
 Una vez creadas, al usar el comando lsblk las particiones del disco son visibles, cada una con un identificador propio.
 Luego de crear las particiones, se debe asignar su file system, definir la estructura a usar para que puedan utilizarse adecuadamente. Para el caso, se usa ext4, definido con el comando:
 mkfs.ext4 /dev/[partición a dar formato]
+
 Por último, para que sean utilizables, deben estar montadas las particiones. Pueden montarse manualmente con el comando mount [dispositivo] [lugar de montaje], siendo el lugar de montaje un directorio dentro de /mnt creado previamente, pudiendo elegir el nombre a usar, como son /www_dir y /backup_dir. 
 El montaje manual perdura durante la sesión únicamente. Para que la unidad se monte en sesiones futuras, debe agregarse al archivo /etc/fstab, en donde debe agregarse al final del mismo una línea para cada partición nueva que se quiera montar, con un formato:
+
 UUID=[UUID dispositivo, visible ejecutando ‘blkid’] [punto de montaje] [file system usado] [opciones]
 Ejemplo: UUID=UUID_del_dispositivo /mnt/www_dir  ext4 defaults (para usar opciones por defecto)
-Migración de archivos de apache:
+
+#### Migración de archivos de apache:
 Una vez configuradas las nuevas particiones, pueden moverse los archivos de apache dentro de /mnt/www_dir. Para que apache lea los archivos desde esta nueva ubicación, deben modificarse dos archivos de configuración: 
--	/etc/apache2/apache2.conf: Contiene configuraciones globales de apache. Entre estas, otorga permisos de seguridad y capacidades a ciertos directorios:
+- /etc/apache2/apache2.conf: Contiene configuraciones globales de apache. Entre estas, otorga permisos de seguridad y capacidades a ciertos directorios:
 
 <directory [directorio]>
              configuraciones sobre la ruta
@@ -82,7 +87,8 @@ uno de estos corresponde al directorio donde se ubican los archivos para cargar 
 -	/etc/apache2/sites-available/000-default.conf: Contiene configuraciones por defecto respecto al sitio, como el puerto en el que escucha, o el punto de lectura de archivos. La línea ‘DocumentRoot’ define el directorio raíz en donde buscar archivos para usar en el sitio. Aquí debe cambiarse nuevamente el contenido a /mnt/www_dir
 Redirigir contenidos de /proc/partitions: Sus contenidos pueden copiarse sobre un nuevo archivo persistente, redirigido a /proc/partición con el comando:
 cat proc/partitions > proc/partición (‘cat’ retorna los contenidos del archivo, y con el símbolo > se redirigen a otro archivo, existente o no)
-Backup:
+
+### 5) Backup:
 El script desarrollado se encuentra en /opt/scripts/backup_full.sh, teniendo que crear el archivo y su directorio. Como parámetros recibe el directorio que se quiera respaldar y, opcionalmente, el directorio destino dentro de /backup_dir, el cual debe existir a la hora de la ejecución del script. 
 Previo a la compresión, se realizan validaciones previas sobre los parámetros y dispositivos: Que se cuente con los parámetros necesarios, que se encuentren las rutas de origen y destino (si la hay), y que las unidades asociadas estén disponibles para el uso
 Para la creación del comprimido, se debe generar el nombre de archivo: 
