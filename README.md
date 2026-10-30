@@ -33,6 +33,7 @@ chmod 600 ~/.ssh/authorized_keys (lectura y escritura para el usuario)
 permit root login: prohibit password (permite entrar como root, pero no con la contraseña)
 password authentication: no (impedir de forma general el uso de contraseñas)
 Una vez configurado, un cliente puede conectarse al host usando su clave privada, con el comando ssh -i [ubicación clave privada] usuario@ip. A su vez, los archivos faltantes pueden copiarse indicando la clave a usar de la misma manera.
+
 Apache: Su uso requiere el paquete ‘apache2’. Una vez instalado, automáticamente entra en ejecución en el arranque, pudiendo verificar el funcionamiento buscando desde un navegador la dirección IP de la máquina virtual, lo que carga el archivo configurado a leer. Los archivos que lee por defecto encuentran dentro de /var/www/html, por lo que se deben copiar allí tanto el index.php como el logo.png, ya que este último es buscado por el index.php dentro de su mismo directorio.
 Para que pueda utilizarse archivos .php, debe además instalarse el paquete ‘libapache2-mod-php’
 MariaDB: Emplea los paquetes mariadb-server, mariadb-client y galera-4 para su gestión y funcionamiento, y php-mysqli y php-pdo para que pueda interactuar el archivo .php con la base de datos. 
