@@ -6,18 +6,22 @@
 El desarrollo del trabajo parte de una máquina virtual previamente configurada, con el sistema operativo Debian 11. La misma puede importarse al gestor de máquinas virtuales a través de los archivos ‘.OVA’ correspondientes. Éstos proveen la imagen de la máquina y sus especificaciones tanto a nivel de dispositivo físico como dentro de la propia máquina virtual. Una vez importada, por fuera de la máquina virtual deben hacerse cambios mínimos que serán explicados a su debido momento durante el desarrollo.
 
 ### 1) Configuración del entorno
-Clave Root:
+#### Clave Root:
 Para poder manipular la máquina virtual, se debe primero obtener la contraseña del usuario Root para llevar a cabo las diversas configuraciones a nivel de sistema. Para ello, se deben modificar las instrucciones de arranque para que inicie el intérprete de comandos como primer paso. 
+
 Al iniciar la máquina virtual, el gestor de arranque GRUB presenta las opciones disponibles. Entre las funciones del usuario, presionando la tecla ‘e’, puede modificar las órdenes de arranque. Entre dichos parámetros, el comando ‘linux’ es el disparador del arranque del sistema operativo. Si se agrega al final de su línea ‘init=/bin/bash’, al iniciar se dispone con una interfaz para ejecutar comandos como usuario Root. 
 Para poder realizar cambios persistentes, mediante el comando ‘mount -o remount, rw /’ se remontan las unidades en modo lectura y escritura. La clave de Root puede cambiarse luego con el comando ‘passwd root’, y puede reiniciarse ejecutando la instrucción ‘exec /sbin/init’.
-Hostname: 
+
+#### Hostname: 
 Para actualizar el hostname de forma persistente, debe actualizarse en el archivo /etc/hostname, cuyo contenido debe ser el nombre de host que quiera usarse.
-Extra: Actualizar repositorios para la descarga de paquetes
-Debian 11 llegó al fin de su ciclo de vida, por lo que los paquetes fueron movidos a los ‘Debian Archives’, debiendo usar las siguientes URLs para el trabajo del gestor de paquetes. Los contenidos deben ingresarse en el archivo /etc/apt/sources.list:
+
+#### Extra: Actualizar repositorios para la descarga de paquetes
+Debian 11 llegó al fin de su ciclo de vida, por lo que los paquetes fueron movidos a los ‘Debian Archives’, debiendo usar las siguientes URLs el gestor de paquetes. Los contenidos deben actualizarse en el archivo /etc/apt/sources.list:
 deb http://archive.debian.org/debian bullseye main contrib non-free
 deb http://archive.debian.org/debian-security/ bullseye-security main contrib non-free
 deb http://archive.debian.org/debian bullseye-updates main contrib non-free
-2) Servicios
+
+### 2) Servicios
 SSH: Para utilizar SSH debe instalarse el paquete ‘openssh-server’. Los pasos para su configuración son los siguientes:
 a)	Actualizar el hostname en /etc/hosts, si el que allí se encuentra no coincide con el nombre de host elegido.
 b)	Copiar la clave pública desde el usuario cliente al host. Para este pasaje inicial de archivos una alternativa implica permitir la conexión estándar con el usuario root usando su contraseña, con el comando:
