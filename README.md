@@ -81,7 +81,7 @@ Una vez configuradas las nuevas particiones, pueden moverse los archivos de apac
 
 <directory [directorio]>
   
-  configuraciones sobre la ruta
+    configuraciones sobre la ruta
 
 &lt;/directory&gt;
 
@@ -92,7 +92,7 @@ uno de estos corresponde al directorio donde se ubican los archivos para cargar 
 #### Redirigir contenidos de /proc/partitions: 
 Sus contenidos pueden copiarse sobre un nuevo archivo persistente, redirigido a /proc/partición con el comando:
 
-cat proc/partitions > proc/partición (‘cat’ retorna los contenidos del archivo, y con el símbolo > se redirigen a otro archivo, existente o no)
+cat proc/partitions > proc/partición
 
 ### 5) Backup:
 El script desarrollado se encuentra en /opt/scripts/backup_full.sh, teniendo que crear el archivo y su directorio. Como parámetros recibe el directorio que se quiera respaldar y, opcionalmente, el directorio destino dentro de /backup_dir, el cual debe existir a la hora de la ejecución del script. 
