@@ -94,26 +94,37 @@ Sus contenidos pueden copiarse sobre un nuevo archivo persistente, redirigido a 
 **cat proc/partitions > proc/partición**
 
 ### 5) Backup:
+#### Script de creación de respaldos
 El script desarrollado se encuentra en /opt/scripts/backup_full.sh, teniendo que crear el archivo y su directorio. Como parámetros recibe el directorio que se quiera respaldar y, opcionalmente, el directorio destino dentro de /backup_dir, el cual debe existir a la hora de la ejecución del script. 
 Previo a la compresión, se realizan validaciones previas sobre los parámetros y dispositivos: Que se cuente con los parámetros necesarios, que se encuentren las rutas de origen y destino (si la hay), y que las unidades asociadas estén disponibles para el uso
 Para la creación del comprimido, se debe generar el nombre de archivo: 
 -	A partir de la ruta origen recibida, se extrae con el comando **basename [ruta]** el nombre del directorio seleccionado, sin su ruta asociada.
 -	Con el comando **date +%Y%m%d** se obtiene la fecha actual con el formato ‘YYYYMMDD’
 -	La ruta destino se arma partiendo del directorio base /mnt/backup_dir, y si se recibe un segundo parámetro para el destino, se le concatena para que tenga el formato /mnt/backup_dir/[rutaDestino]
-El comprimido resultante entonces se ubicaría en:
-/mnt/backup_dir/[rutaOpcional]/[nombreDirectorio]_bkp_YYYYMMDD.tar.gz
-Y la compresión se realiza con el comando 'tar' con las opciones ‘c’ (crear archivo nuevo), ‘z’ (comprimir usando gzip) y ‘f’ (se indica el nombre del archivo de salida). 
-Eso sí, al comprimir un archivo, este mantiene su estructura de directorios, por lo que al descomprimirlo se genera una serie de directorios en el lugar de extracción igual a los directorios padre del comprimido, desde la raíz. Por ejemplo, comprimir el directorio ‘/root/textos/’, y extraerlo en ‘/root/test/testUno/’, resulta en una estructura de forma ‘/root/tests/testUno/root/textos/[contenidos]’
-Para evitar que suceda, se usa la opción ‘-C [rutaOrígen] [contenidosAComprimir]’, para que la estructura de directorios parta de la ruta origen especificada, en lugar de la raíz. 
-El comando utilizado entonces es el siguiente:
+
+El comprimido resultante entonces se ubicaría en: /mnt/backup_dir/[rutaOpcional]/[nombreDirectorio]_bkp_YYYYMMDD.tar.gz
+
+La compresión se realiza con el comando 'tar' con las opciones ‘c’ (crear archivo nuevo), ‘z’ (comprimir usando gzip) y ‘f’ (se indica el nombre del archivo de salida). Eso sí, al comprimir un archivo, este mantiene su estructura de directorios, por lo que al descomprimirlo se genera una serie de directorios en el lugar de extracción igual a los directorios padre del comprimido, desde la raíz. Por ejemplo, comprimir el directorio ‘/root/textos/’, y extraerlo en ‘/root/test/testUno/’, resulta en una estructura de forma ‘/root/tests/testUno/root/textos/[contenidos]’
+
+Para evitar que suceda, se usa la opción ‘-C [rutaOrígen] [contenidosAComprimir]’, para que la estructura de directorios parta de la ruta origen especificada, en lugar de la raíz.  El comando utilizado entonces es el siguiente:
+
 **tar -czf “[ubicación donde comprimir]” -C “[directorio a comprimir” “.”**
+
 Ciertos directorios tienen archivos que cambian constantemente, pudiendo cambiar incluso durante la misma compresión. Para identificar el caso y disparar una advertencia, se debe capturar el código de salida del último comando ejecutado, el comando ‘tar’, utilizando ‘$?’. Si el código de salida es 0, entonces fue exitoso. Si es 1 en cambio, indica que ocurrió una de estas inconsistencias, pero pudo realizarse la compresión. Otros códigos de salida indican errores que impiden el funcionamiento.
-Automatización:
+
+#### Automatización:
 Cron es una herramienta que permite la ejecución periódica de instrucciones. Para agregar operaciones a realizar, una forma de hacerlo es creando un archivo dentro de /etc/cron.d/ con los comandos a ejecutar, definiendo el momento en que se quiera, mediante líneas con el siguiente formato: 
+
 [Minuto] [Hora] [Día mes] [Mes] [Día semana] [usuario con que ejecuta] [comando]
+
 Respecto al cronograma, si un valor no debe especificarse, el wildcard ‘*’ aplica para todos sus valores, entonces:
+
 00 23 * * 1,3,5 root /bin/bash /opt/scripts/backup_full.sh /mnt/www_dir
+
 Ejecuta el script de respaldo sobre el directorio /mnt/www_dir a las 23:00 los lunes, miércoles y viernes. Y:
+
 00 00 * * * root /bin/bash /opt/scripts/backup_full.sh /var/logs
+
 Respalda /var/logs todos los días a las 00:00
+
 Los cambios efectuados sobre dichos archivos, incluyendo su creación, tienen efecto en el mismo instante, no se deben hacer recargas manuales del servicio.
