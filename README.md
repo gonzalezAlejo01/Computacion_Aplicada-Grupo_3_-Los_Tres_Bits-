@@ -91,7 +91,6 @@ uno de estos corresponde al directorio donde se ubican los archivos para cargar 
 
 #### Redirigir contenidos de /proc/partitions: 
 Sus contenidos pueden copiarse sobre un nuevo archivo persistente, redirigido a /proc/partición con el comando:
-
 cat proc/partitions > proc/partición
 
 ### 5) Backup:
