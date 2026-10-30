@@ -22,14 +22,14 @@ deb http://archive.debian.org/debian-security/ bullseye-security main contrib no
 deb http://archive.debian.org/debian bullseye-updates main contrib non-free
 
 ### 2) Servicios
-SSH: Para utilizar SSH debe instalarse el paquete ‘openssh-server’. Los pasos para su configuración son los siguientes:
-a)	Actualizar el hostname en /etc/hosts, si el que allí se encuentra no coincide con el nombre de host elegido.
-b)	Copiar la clave pública desde el usuario cliente al host. Para este pasaje inicial de archivos una alternativa implica permitir la conexión estándar con el usuario root usando su contraseña, con el comando:
+#### SSH: Para utilizar SSH debe instalarse el paquete ‘openssh-server’. Los pasos para su configuración son los siguientes:
+- a)	Actualizar el hostname en /etc/hosts, si el que allí se encuentra no coincide con el nombre de host elegido.
+- b)	Copiar la clave pública desde el usuario cliente al host. Para este pasaje inicial de archivos una alternativa implica permitir la conexión estándar con el usuario root usando su contraseña, con el comando:
 scp [ubicación clave publica] root@direcciónIP:/etc/.ssh/authorized_keys
-c)	Otorgar los permisos adecuados para el directorio .ssh del usuario y al archivo .ssh/authorized_keys:
+- c)	Otorgar los permisos adecuados para el directorio .ssh del usuario y al archivo .ssh/authorized_keys:
 chmod 700 ~/.ssh (lectura, escritura, ejecución para el usuario)
 chmod 600 ~/.ssh/authorized_keys (lectura y escritura para el usuario)
-d)	Configurar SSH para que utilice únicamente el par de claves: El archivo /etc/ssh/sshd_config contiene las configuraciones a usar en el dispositivo en caso de ser el servidor. Allí, deben modificarse los parámetros:
+- d)	Configurar SSH para que utilice únicamente el par de claves: El archivo /etc/ssh/sshd_config contiene las configuraciones a usar en el dispositivo en caso de ser el servidor. Allí, deben modificarse los parámetros:
 permit root login: prohibit password (permite entrar como root, pero no con la contraseña)
 password authentication: no (impedir de forma general el uso de contraseñas)
 Una vez configurado, un cliente puede conectarse al host usando su clave privada, con el comando ssh -i [ubicación clave privada] usuario@ip. A su vez, los archivos faltantes pueden copiarse indicando la clave a usar de la misma manera.
