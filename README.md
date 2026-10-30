@@ -80,12 +80,18 @@ Una vez configuradas las nuevas particiones, pueden moverse los archivos de apac
 - /etc/apache2/apache2.conf: Contiene configuraciones globales de apache. Entre estas, otorga permisos de seguridad y capacidades a ciertos directorios:
 
 <directory [directorio]>
+  
   configuraciones sobre la ruta
+
 &lt;/directory&gt;
 
 uno de estos corresponde al directorio donde se ubican los archivos para cargar en el sitio. Por defecto, está configurado para /var/www. Son permisos necesarios para el funcionamiento, por lo que debe cambiarse por /mnt/www_dir
--	/etc/apache2/sites-available/000-default.conf: Contiene configuraciones por defecto respecto al sitio, como el puerto en el que escucha, o el punto de lectura de archivos. La línea ‘DocumentRoot’ define el directorio raíz en donde buscar archivos para usar en el sitio. Aquí debe cambiarse nuevamente el contenido a /mnt/www_dir
-Redirigir contenidos de /proc/partitions: Sus contenidos pueden copiarse sobre un nuevo archivo persistente, redirigido a /proc/partición con el comando:
+
+-	/etc/apache2/sites-available/000-default.conf: Contiene configuraciones por defecto respecto al sitio, como el puerto en el que escucha, o el punto de lectura de archivos. La línea ‘DocumentRoot’ define el directorio raíz en donde buscar archivos para usar en el sitio. Aquí debe cambiarse nuevamente el contenido a /mnt/www_dir.
+
+#### Redirigir contenidos de /proc/partitions: 
+Sus contenidos pueden copiarse sobre un nuevo archivo persistente, redirigido a /proc/partición con el comando:
+
 cat proc/partitions > proc/partición (‘cat’ retorna los contenidos del archivo, y con el símbolo > se redirigen a otro archivo, existente o no)
 
 ### 5) Backup:
