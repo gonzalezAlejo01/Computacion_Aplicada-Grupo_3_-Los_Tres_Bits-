@@ -17,9 +17,9 @@ Para actualizar el hostname de forma persistente, debe actualizarse en el archiv
 
 #### Actualizar repositorios para la descarga de paquetes
 Debian 11 llegó al fin de su ciclo de vida, por lo que los paquetes fueron movidos a los ‘Debian Archives’, debiendo usar las siguientes URLs el gestor de paquetes. Los contenidos deben actualizarse en el archivo /etc/apt/sources.list:
-deb http://archive.debian.org/debian bullseye main contrib non-free
-deb http://archive.debian.org/debian-security/ bullseye-security main contrib non-free
-deb http://archive.debian.org/debian bullseye-updates main contrib non-free
+- deb http://archive.debian.org/debian bullseye main contrib non-free
+- deb http://archive.debian.org/debian-security/ bullseye-security main contrib non-free
+- deb http://archive.debian.org/debian bullseye-updates main contrib non-free
 
 ### 2) Servicios
 #### SSH: 
