@@ -55,7 +55,7 @@ la dirección IP debe ser una disponible dentro del rango de direcciones de la r
 -	gateway [default Gateway, el mismo que la máquina anfitriona]
 -	dns-nameservers [misma dirección que el Gateway]
 
-Una vez modificado el archivo, se deben aplicar los cambios en la sesión actual con el comando **systectl restart networking.services**
+Una vez modificado el archivo, se deben aplicar los cambios en la sesión actual con el comando **systemctl restart networking.services**
 
 ### 4) Almacenamiento
 #### Creación del disco virtual:
