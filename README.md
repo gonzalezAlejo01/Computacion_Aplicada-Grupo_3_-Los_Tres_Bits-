@@ -75,6 +75,7 @@ Por último, para que sean utilizables, deben estar montadas las particiones. Pu
 El montaje manual perdura durante la sesión únicamente. Para que la unidad se monte en sesiones futuras, debe agregarse al archivo /etc/fstab, en donde debe agregarse al final del mismo una línea para cada partición nueva que se quiera montar, con un formato:
 
 UUID=[UUID dispositivo, visible ejecutando ‘blkid’] [punto de montaje] [file system usado] [opciones]
+
 Ejemplo: UUID=UUID_del_dispositivo /mnt/www_dir  ext4 defaults (para usar opciones por defecto)
 
 #### Migración de archivos de apache:
