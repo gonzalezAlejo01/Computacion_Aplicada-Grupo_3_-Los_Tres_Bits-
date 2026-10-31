@@ -1,6 +1,6 @@
 # Computacion_Aplicada-Grupo_3_-Los_Tres_Bits-
 
-## Integrantes: 
+## Integrantes: Alejo González, Matías Gómez, Laureano Bautista Gonzáles Hughes, Juan Ignacio García
 ## Procedimientos llevados a cabo para la configuración de la máquina virtual
 ### Preparación: Importar la máquina virtual base
 El desarrollo del trabajo parte de una máquina virtual previamente configurada, con el sistema operativo Debian 11. La misma puede importarse al gestor de máquinas virtuales a través de los archivos ‘.OVA’ correspondientes. Éstos proveen la imagen de la máquina y sus especificaciones tanto a nivel de dispositivo físico como dentro de la propia máquina virtual. Una vez importada, por fuera de la máquina virtual deben hacerse cambios mínimos que serán explicados a su debido momento durante el desarrollo.
