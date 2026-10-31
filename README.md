@@ -50,9 +50,11 @@ Para la conexión con la base de datos, el index.php utiliza un usuario y clave 
 ### 3) Configuración de red:
 Por defecto, el dispositivo usa una dirección IP asignada mediante DHCP. Para configurar una dirección estática, se debe modificar el archivo /etc/network/interfaces: La línea que comienza con ‘iface’ define las configuraciones del dispositivo, como el nombre de interfaz, y el modo de direccionamiento. En lugar de, como tiene el ejemplo, dhcp, debe en su lugar escribirse ‘static’ para dirección estática, y en las siguientes líneas definir:
 -	address   [dirección IP elegida]/[mascara de subred]
+
 la dirección IP debe ser una disponible dentro del rango de direcciones de la red física, para que puedan reconocerse dentro de la red la máquina virtual y la máquina anfitriona, y la máscara de subred adecuada
 -	gateway [default Gateway, el mismo que la máquina anfitriona]
 -	dns-nameservers [misma dirección que el Gateway]
+
 Una vez modificado el archivo, se deben aplicar los cambios en la sesión actual con el comando **systectl restart networking.services**
 
 ### 4) Almacenamiento
