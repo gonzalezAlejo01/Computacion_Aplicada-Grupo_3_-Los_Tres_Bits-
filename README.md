@@ -26,7 +26,7 @@ Debian 11 llegó al fin de su ciclo de vida, por lo que los paquetes fueron movi
 Para utilizar SSH debe instalarse el paquete **openssh-server**. Los pasos para su configuración son los siguientes:
 - Actualizar el hostname en /etc/hosts, si el que allí se encuentra no coincide con el nombre de host elegido.
 - Copiar la clave pública desde el usuario cliente al host. Para este pasaje inicial de archivos una alternativa implica permitir la conexión estándar con el usuario root usando su contraseña, con el comando:
-**scp [ubicación clave publica] root@direcciónIP:/etc/.ssh/authorized_keys**
+**scp [ubicación clave publica] root@direcciónIP:/root/.ssh/authorized_keys**
 - Otorgar los permisos adecuados para el directorio .ssh del usuario y al archivo .ssh/authorized_keys:
 **chmod 700 ~/.ssh** (lectura, escritura, ejecución para el usuario)
 **chmod 600 ~/.ssh/authorized_keys** (lectura y escritura para el usuario)
