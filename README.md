@@ -126,6 +126,7 @@ Dentro del mismo se definen los comandos a ejecutar de forma automática. En cad
 **[Minuto] [Hora] [Día mes] [Mes] [Día semana] [usuario con que ejecuta] [comando]**
 
 Respecto al cronograma, si un valor no debe especificarse, el wildcard ‘*’ aplica para todos sus valores, entonces:
+
 00 23 * * 1,3,5 root /bin/bash /opt/scripts/backup_full.sh /mnt/www_dir
 Ejecuta el script de respaldo sobre el directorio /mnt/www_dir a las 23:00 los lunes, miércoles y viernes,
 
