@@ -49,7 +49,9 @@ Para la conexión con la base de datos, el index.php utiliza un usuario y clave 
 
 ### 3) Configuración de red:
 Por defecto, el dispositivo usa una dirección IP asignada mediante DHCP. Para configurar una dirección estática, se debe modificar el archivo /etc/network/interfaces: Las líneas que comienza con ‘iface’ definen las configuraciones de interfaces de red del dispositivo, como el nombre de interfaz, y el modo de direccionamiento. Para configurar una dirección estática para el dispositivo, se debe cambiar su interfaz de red primaria a lo siguiente:
+
 **auto [nombre]**: Se define la condición de activación para la interfaz de red, seguido del nombre asignado a la interfaz. La opción ‘auto’ indica que la interfaz de red es activada por la inicialización de los servicios de red, y sus cambios son aplicados con el reinicio de estos. 
+
 **iface [nombre] inet static**: Se define para la interfaz de red de nombre [nombre], que se utiliza una dirección de red IPV4 estática.Al ser una configuración estática, deben definirse, para su interfaz primaria, manualmente los valores que se quieren usar para la dirección IP y su puerta de enlace o Gateway, por lo que seguido a la línea deben especificarse:
 - **address [dirección IP elegida]/[mascara de subred]**
 La dirección IP debe ser una disponible dentro del rango de direcciones de la red física, para que puedan reconocerse dentro de la red la máquina virtual y la máquina anfitriona, y la máscara de subred adecuada
@@ -98,7 +100,7 @@ Sus contenidos pueden copiarse sobre un nuevo archivo persistente, redirigido a 
 ### 5) Backup:
 #### Script de creación de respaldos
 El script desarrollado se encuentra en /opt/scripts/backup_full.sh, teniendo que crear el archivo y su directorio. Como parámetros recibe el directorio que se quiera respaldar y, opcionalmente, el directorio destino dentro de /backup_dir, el cual debe existir a la hora de la ejecución del script. 
-Previo a la compresión, se realizan validaciones previas sobre los parámetros y dispositivos: Que se cuente con los parámetros necesarios, que se encuentren las rutas de origen y destino (si la hay), y que las unidades asociadas estén disponibles para el uso
+Previo a la compresión, se realizan validaciones previas sobre los parámetros y dispositivos: Que se cuente con los parámetros necesarios, que las unidades asociadas estén disponibles para el uso, que se encuentren las rutas de origen y destino si la hay, y que haya espacio suficiente para crear el comprimido. Dado que la relación de tamaño entre un archivo y su comprimido es variable, como medida de seguridad requiere que dentro de /backup_dir se cuente con suficiente espacio para los archivos sin comprimir.
 Para la creación del comprimido, se debe generar el nombre de archivo: 
 -	A partir de la ruta origen recibida, se extrae con el comando **basename [ruta]** el nombre del directorio seleccionado, sin su ruta asociada.
 -	Con el comando **date +%Y%m%d** se obtiene la fecha actual con el formato ‘YYYYMMDD’
@@ -115,18 +117,26 @@ Para evitar que suceda, se usa la opción ‘-C [rutaOrígen] [contenidosACompri
 Ciertos directorios tienen archivos que cambian constantemente, pudiendo cambiar incluso durante la misma compresión. Para identificar el caso y disparar una advertencia, se debe capturar el código de salida del último comando ejecutado, el comando ‘tar’, utilizando ‘$?’. Si el código de salida es 0, entonces fue exitoso. Si es 1 en cambio, indica que ocurrió una de estas inconsistencias, pero pudo realizarse la compresión. Otros códigos de salida indican errores que impiden el funcionamiento.
 
 #### Automatización:
-Cron es una herramienta que permite la ejecución periódica de instrucciones. Para agregar operaciones a realizar, una forma de hacerlo es creando un archivo dentro de /etc/cron.d/ con los comandos a ejecutar, definiendo el momento en que se quiera, mediante líneas con el siguiente formato: 
+Cron es una herramienta que permite la ejecución periódica de instrucciones. Para definirlas, cada usuario cuenta con su propio archivo crontab, pudiendo editar el del usuario actualmente en uso mediante el comando: **crontab -e**
+Dentro del mismo se definen los comandos a ejecutar de forma automática. En cada línea, se especifica el cronograma de ejecución, y la instrucción a realizar, mediante el formato: 
 
-[Minuto] [Hora] [Día mes] [Mes] [Día semana] [usuario con que ejecuta] [comando]
+**[Minuto] [Hora] [Día mes] [Mes] [Día semana] [usuario con que ejecuta] [comando]**
 
 Respecto al cronograma, si un valor no debe especificarse, el wildcard ‘*’ aplica para todos sus valores, entonces:
-
 - 00 23 * * 1,3,5 root /bin/bash /opt/scripts/backup_full.sh /mnt/www_dir
+Ejecuta el script de respaldo sobre el directorio /mnt/www_dir a las 23:00 los lunes, miércoles y viernes,
 
-Ejecuta el script de respaldo sobre el directorio /mnt/www_dir a las 23:00 los lunes, miércoles y viernes, y:
-
+y:
 - 00 00 * * * root /bin/bash /opt/scripts/backup_full.sh /var/logs
-
 Respalda /var/logs todos los días a las 00:00.
 
 Los cambios efectuados sobre dichos archivos, incluyendo su creación, tienen efecto en el mismo instante, no se deben hacer recargas manuales del servicio.
+
+Dado que su ejecución sucede en segundo plano, no informa sobre las salidas de cada instancia, por lo que sus outputs deben redirigirse a archivos para llevar registro de los resultados de cada ejecución.
+Para redirigir salidas de un comando, al final de este, se agrega:
+
+**>> /root/backups/logs 2>&1**
+-**>>**: Los contenidos se agregan al final del archivo, no se sobreescriben
+-**/root/backups/logs**: El archivo donde se quieren escribir los contenidos
+-**2>&1**: Redirige el flujo de datos 2, el de errores, al mismo lugar que el 1, de salidas estándar de ejecución 
+
