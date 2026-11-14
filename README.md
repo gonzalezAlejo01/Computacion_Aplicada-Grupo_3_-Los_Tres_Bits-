@@ -100,7 +100,9 @@ Sus contenidos pueden copiarse sobre un nuevo archivo persistente, redirigido a 
 ### 5) Backup:
 #### Script de creación de respaldos
 El script desarrollado se encuentra en /opt/scripts/backup_full.sh, teniendo que crear el archivo y su directorio. Como parámetros recibe el directorio que se quiera respaldar y, opcionalmente, el directorio destino dentro de /backup_dir, el cual debe existir a la hora de la ejecución del script. 
+
 Previo a la compresión, se realizan validaciones previas sobre los parámetros y dispositivos: Que se cuente con los parámetros necesarios, que las unidades asociadas estén disponibles para el uso, que se encuentren las rutas de origen y destino si la hay, y que haya espacio suficiente para crear el comprimido. Dado que la relación de tamaño entre un archivo y su comprimido es variable, como medida de seguridad requiere que dentro de /backup_dir se cuente con suficiente espacio para los archivos sin comprimir.
+
 Para la creación del comprimido, se debe generar el nombre de archivo: 
 -	A partir de la ruta origen recibida, se extrae con el comando **basename [ruta]** el nombre del directorio seleccionado, sin su ruta asociada.
 -	Con el comando **date +%Y%m%d** se obtiene la fecha actual con el formato ‘YYYYMMDD’
@@ -118,16 +120,18 @@ Ciertos directorios tienen archivos que cambian constantemente, pudiendo cambiar
 
 #### Automatización:
 Cron es una herramienta que permite la ejecución periódica de instrucciones. Para definirlas, cada usuario cuenta con su propio archivo crontab, pudiendo editar el del usuario actualmente en uso mediante el comando: **crontab -e**
+
 Dentro del mismo se definen los comandos a ejecutar de forma automática. En cada línea, se especifica el cronograma de ejecución, y la instrucción a realizar, mediante el formato: 
 
 **[Minuto] [Hora] [Día mes] [Mes] [Día semana] [usuario con que ejecuta] [comando]**
 
 Respecto al cronograma, si un valor no debe especificarse, el wildcard ‘*’ aplica para todos sus valores, entonces:
-- 00 23 * * 1,3,5 root /bin/bash /opt/scripts/backup_full.sh /mnt/www_dir
+00 23 * * 1,3,5 root /bin/bash /opt/scripts/backup_full.sh /mnt/www_dir
 Ejecuta el script de respaldo sobre el directorio /mnt/www_dir a las 23:00 los lunes, miércoles y viernes,
 
 y:
-- 00 00 * * * root /bin/bash /opt/scripts/backup_full.sh /var/logs
+
+00 00 * * * root /bin/bash /opt/scripts/backup_full.sh /var/logs
 Respalda /var/logs todos los días a las 00:00.
 
 Los cambios efectuados sobre dichos archivos, incluyendo su creación, tienen efecto en el mismo instante, no se deben hacer recargas manuales del servicio.
@@ -136,7 +140,7 @@ Dado que su ejecución sucede en segundo plano, no informa sobre las salidas de 
 Para redirigir salidas de un comando, al final de este, se agrega:
 
 **>> /root/backups/logs 2>&1**
--**>>**: Los contenidos se agregan al final del archivo, no se sobreescriben
--**/root/backups/logs**: El archivo donde se quieren escribir los contenidos
--**2>&1**: Redirige el flujo de datos 2, el de errores, al mismo lugar que el 1, de salidas estándar de ejecución 
+- **>>**: Los contenidos se agregan al final del archivo, no se sobreescriben
+- **/root/backups/logs**: El archivo donde se quieren escribir los contenidos
+- **2>&1**: Redirige el flujo de datos 2, el de errores, al mismo lugar que el 1, de salidas estándar de ejecución 
 
