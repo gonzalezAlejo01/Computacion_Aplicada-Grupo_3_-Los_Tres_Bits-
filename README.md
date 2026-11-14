@@ -94,8 +94,8 @@ uno de estos corresponde al directorio donde se ubican los archivos para cargar 
 -	/etc/apache2/sites-available/000-default.conf: Contiene configuraciones por defecto respecto al sitio, como el puerto en el que escucha, o el punto de lectura de archivos. La línea ‘DocumentRoot’ define el directorio raíz en donde buscar archivos para usar en el sitio. Aquí debe cambiarse nuevamente el contenido a /mnt/www_dir.
 
 #### Redirigir contenidos de /proc/partitions: 
-Sus contenidos pueden copiarse sobre un nuevo archivo persistente, redirigido a /proc/partición con el comando:
-**cat proc/partitions > proc/partición**
+Sus contenidos pueden copiarse sobre un nuevo archivo persistente, redirigido con el comando:
+**cat proc/partitions > partición**
 
 ### 5) Backup:
 #### Script de creación de respaldos
